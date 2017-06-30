@@ -1,10 +1,13 @@
 package com.codepath.apps.restclienttemplate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -12,6 +15,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -24,6 +28,7 @@ public class TimelineActivity extends AppCompatActivity {
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,17 +36,72 @@ public class TimelineActivity extends AppCompatActivity {
         client = TwitterApp.getRestClient();
 
         //find the Recyclerview
-        rvTweets = (RecyclerView) findViewById(R.id.rvTweet);
+        rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
         //initiate the arraylist (data source)
         tweets = new ArrayList<>();
-        //construct the adapter from this datasource
+        //construct the adapter from this data source
         tweetAdapter = new TweetAdapter(tweets);
-        //RecyclerView setup(layout manager, use adaopter)
+        //RecyclerView setup(layout manager, use adapter)
         rvTweets.setLayoutManager(new LinearLayoutManager(this));
         //set the adapter
         rvTweets.setAdapter(tweetAdapter);
         populateTimeline();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.compose, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle presses on the action bar items
+        switch (item.getItemId()) {
+            case R.id.miCompose:
+                composeMessage();
+                return true;
+//            case R.id.miProfile:
+//                showProfileView();
+//                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private final int REQUEST_CODE = 20;
+
+    private void composeMessage() {
+        Intent i = new Intent(TimelineActivity.this, ComposeActivity.class);
+        startActivityForResult(i, REQUEST_CODE);
+
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        // check request code and result code first
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+
+            // Use data parameter
+            Tweet tweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("compose_tweet"));
+            tweets.add(0, tweet);
+            tweetAdapter.notifyItemInserted(0);
+            rvTweets.scrollToPosition(0);
+        }
+    }
+
+    public void onSubmit() {
+        // closes the activity and returns to first screen
+        this.finish();
+    }
+
+
+
+
+
 
     private void populateTimeline(){
         client.getHomeTimeline(new JsonHttpResponseHandler() {
