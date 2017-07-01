@@ -13,8 +13,8 @@
         android:hint="What do you want to tweet?"
         android:gravity="bottom"
         android:inputType="textPersonName"
+        android:layout_centerVertical="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/buttonTweet" />
 
     <Button
