@@ -108,4 +108,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
         return relativeDate;
     }
+
+    public void clear() {
+        mTweets.clear();
+    }
+
+    public void addItem(Tweet tweet) {
+        mTweets.add(tweet);
+    }
 }
