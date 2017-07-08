@@ -17,6 +17,11 @@ The following **required** functionality is completed:
   * [x] User can then enter a new tweet and post this to twitter
   * [x] User is taken back to home timeline with **new tweet visible** in timeline
   * [x] Newly created tweet should be manually inserted into the timeline and not rely on a full refresh
+  
+*  []User can click on the profile image in any tweet to see another user's profile. (3 points)
+  * [] User can see picture, tagline, # of followers, # of following, and tweets of clicked user.
+  * [x] Profile view should include that user's timeline
+  * [x] The users/show endpoint can be used to access this information.
 
 The following **optional** features are implemented:
 
@@ -53,6 +58,9 @@ The following **additional** features are implemented:
 Here's a walkthrough of implemented user stories:
 
 <img src='https://github.com/Decam9/Twitter_App/blob/master/app/src/main/res/Tweeter%20App.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+<img src='https://github.com/Decam9/Twitter_App/blob/master/app/src/main/java/com/codepath/apps/restclienttemplate/TweeterApp2.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
