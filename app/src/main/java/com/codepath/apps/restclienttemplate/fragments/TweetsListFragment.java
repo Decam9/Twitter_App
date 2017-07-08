@@ -15,7 +15,6 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -23,7 +22,12 @@ import java.util.ArrayList;
  * Created by decam9 on 7/3/17.
  */
 
-public class TweetsListFragment extends Fragment {
+public class TweetsListFragment extends Fragment implements TweetAdapter.TweetAdapterListener {
+
+    public interface TweetSelectedListener {
+        // handle tweet selection
+        public void onTweetSelected(Tweet tweet);
+    }
 
     TweetAdapter tweetAdapter;
     ArrayList<Tweet> tweets;
@@ -43,7 +47,7 @@ public class TweetsListFragment extends Fragment {
         //initiate the arraylist (data source)
         tweets = new ArrayList<>();
         //construct the adapter from this data source
-        tweetAdapter = new TweetAdapter(tweets);
+        tweetAdapter = new TweetAdapter(tweets, this);
         //RecyclerView setup(layout manager, use adapter)
         rvTweets.setLayoutManager(new LinearLayoutManager(getContext()));
         //set the adapter
@@ -55,13 +59,26 @@ public class TweetsListFragment extends Fragment {
         tweetAdapter.clear();
         for (int i = 0; i < response.length(); i++) {
             try {
-                Tweet newTweet;
-                newTweet = Tweet.fromJSon((JSONObject) response.get(i));
-                tweetAdapter.addItem(newTweet);
+                Tweet tweet = Tweet.fromJSon(response.getJSONObject(i));
+                tweets.add(tweet);
+                tweetAdapter.notifyItemInserted(tweets.size()-1);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        tweetAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onItemSelected(View view, int position) {
+        Tweet tweet = tweets.get(position);
+        ((TweetSelectedListener) getActivity()).onTweetSelected(tweet);
+    }
+
+    public void onCreatedNewTweet(Tweet tweet) {
+            tweets.add(0, tweet);
+            tweetAdapter.notifyItemInserted(0);
+            rvTweets.getLayoutManager().scrollToPosition(0);
+    }
+
+
 }

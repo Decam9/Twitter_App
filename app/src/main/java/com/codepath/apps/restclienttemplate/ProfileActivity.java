@@ -15,6 +15,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import cz.msebera.android.httpclient.Header;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -56,6 +58,24 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
         });
+
+//        client.getOtherUserTimeline(String.valueof(screenName), screenName, new JsonHttpResponseHandler() {
+//            @Override
+//            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+//                //deserialize the user object
+//                try {
+//                    User user = User.fromJSON(response);
+//                    //set the title of the action bar based on the user info
+//                    getSupportActionBar().setTitle(user.screenName);
+//                    //populate the user headline
+//                    populateUserHeadline (user);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//            }
+//
+//        });
     }
 
     public void populateUserHeadline(User user){
@@ -72,6 +92,6 @@ public class ProfileActivity extends AppCompatActivity {
         tvFollowers.setText(user.followersCount + " followers");
         tvFollowing.setText(user.followingCount + " following");
         //load profile image with glide
-        Glide.with(this).load(user.profileImageURL).into(ivProfileImage);
+        Glide.with(this).load(user.profileImageURL).bitmapTransform(new RoundedCornersTransformation(this, 200, 0)).into(ivProfileImage);
     }
 }
